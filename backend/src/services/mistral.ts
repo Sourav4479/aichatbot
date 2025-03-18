@@ -1,0 +1,1 @@
+// This file is no longer used. The functionality has been moved to the chat.ts handler. 

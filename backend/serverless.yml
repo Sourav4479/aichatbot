@@ -1,0 +1,44 @@
+service: tech-chatbot-backend
+
+frameworkVersion: '2'
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: ${opt:stage, 'dev'}
+  region: ap-south-1
+  environment:
+    MISTRAL_API_KEY: <KEY>
+    MODEL_NAME: mistral-medium
+    MAX_TOKENS: 1000
+
+plugins:
+  - serverless-plugin-typescript
+  - serverless-offline
+
+custom:
+  serverless-offline:
+    useChildProcesses: true
+package:
+  individually: true
+  exclude:
+    - .git/**
+    - node_modules/**
+    - '!node_modules/@mistralai/**'
+    - '!node_modules/dotenv/**'
+
+functions:
+  chat:
+    handler: src/handlers/chat.handler
+    events:
+      - http:
+          path: /chat
+          method: post
+          cors: true
+  hello:
+    handler: src/handlers/hello.handler
+    events:
+      - http:
+          path: /hello
+          method: get
+          cors: true 
